@@ -7,6 +7,7 @@ import '../services/tts_service.dart';
 import '../services/storage_service.dart';
 import '../widgets/audio_bar.dart';
 import '../widgets/book_selector.dart';
+import '../widgets/settings_modal.dart';
 
 class ReaderScreen extends StatefulWidget {
   const ReaderScreen({super.key});
@@ -31,6 +32,9 @@ class _ReaderScreenState extends State<ReaderScreen> {
       _b = p['bookIndex']; _c = p['chapterIndex']; _tts.speechRate = p['rate'];
       _loading = false;
     });
+    if ((p['voiceName'] as String).isNotEmpty) {
+      _tts.applyVoice(p['voiceName'], p['voiceLocale']);
+    }
     _update();
   }
 
@@ -60,9 +64,21 @@ class _ReaderScreenState extends State<ReaderScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF18181B),
         title: InkWell(
-          onTap: () => showModalBottomSheet(context: context, builder: (_) => BookSelectorSheet(books: _books, activeBook: _b, activeChapter: _c, onSelect: _change)),
+          onTap: () => showModalBottomSheet(context: context, isScrollControlled: true, builder: (_) => BookSelectorSheet(books: _books, activeBook: _b, activeChapter: _c, onSelect: _change)),
           child: Text("${_books[_b].name} ${_c + 1} ▾", style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings, color: Color(0xFFD4AF37)),
+            tooltip: "Configuración de Voz",
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (_) => SettingsModal(ttsService: _tts),
+            ),
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: Stack(
         children: [
