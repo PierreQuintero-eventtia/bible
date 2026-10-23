@@ -1,0 +1,16 @@
+name: biblia_hablada
+description: "Biblia Reina Valera 1960 con lectura en voz alta"
+publish_to: "none"
+version: 1.0.0+1
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_tts: ^4.2.2
+  scrollable_positioned_list: ^0.3.8
+  shared_preferences: ^2.5.2
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/es_rvr1960.json
